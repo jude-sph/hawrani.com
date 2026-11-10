@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — Writing{% endblock %}
+
+{% block content %}
+<article class="view view--article section section--tight-top">
+  {#- The page is built once, so the default back target is baked in; the
+      script below switches it when the visitor arrived with ?ref=. -#}
+  {% if from_projects %}
+  <a href="{{ url_for('projects') }}" class="back-link" id="back-link">&larr; Back to Projects</a>
+  {% else %}
+  <a href="{{ url_for('blog') }}" class="back-link" id="back-link">&larr; Back to Writing</a>
+  {% endif %}
+  <script>
+    (function () {
+      var targets = {
+        projects: [{{ url_for('projects')|tojson }}, 'Back to Projects'],
+        writing: [{{ url_for('blog')|tojson }}, 'Back to Writing']
+      };
+      var t = targets[new URLSearchParams(location.search).get('ref')];
+      var link = document.getElementById('back-link');
+      if (t && link) { link.href = t[0]; link.innerHTML = '&larr; ' + t[1]; }
+    })();
+  </script>
+
+  <div class="article-meta">
+    {% if post.lesswrong_id %}
+      {% if post.lesswrong_url %}
+      <a href="{{ post.lesswrong_url }}" target="_blank" rel="noopener" class="article-meta__link">Imported from LessWrong</a>
+      <a href="{{ post.lesswrong_url }}" target="_blank" rel="noopener" class="badge-lw">LW</a>
+      {% else %}
+      <span>Imported from LessWrong</span>
+      <span class="badge-lw">LW</span>
+      {% endif %}
+    {% elif post.date %}
+      <span>{{ post.date }}</span>
+    {% endif %}
+  </div>
+
+  <h1 class="article-title">{{ post.title }}</h1>
+
+  {% if post.image and not post.lesswrong_id %}
+  <div class="article-hero"><img src="{{ post.image }}" alt="{{ post.title }}"></div>
+  {% endif %}
+
+  {# ---------- Body ---------- #}
+  {% if post.lesswrong_id %}
+    {% if post.lesswrong_error %}
+      <div class="lw-import-fallback">
+        <div class="eyebrow">Imported post — couldn't load</div>
+        <p>This essay is hosted on LessWrong and the remote copy couldn't be fetched right now. You can read the original at the link below.</p>
+      </div>
+      <p class="lw-attribution">
+        <a href="{{ post.lesswrong_url }}" target="_blank" rel="noopener">Read &ldquo;{{ post.title }}&rdquo; on LessWrong &nearr;</a>
+      </p>
+    {% else %}
+      <div class="rich">{{ post.lesswrong_html|safe }}</div>
+      {% if post.lesswrong_url %}
+      <p class="lw-attribution">
+        Originally published on <a href="{{ post.lesswrong_url }}" target="_blank" rel="noopener">LessWrong &nearr;</a>
+      </p>
+      {% endif %}
+    {% endif %}
+
+  {% elif post.processed_blocks %}
+    <div class="rich">
+      {% for block in post.processed_blocks %}
+        {% if block.type == 'text' %}
+          {{ block.content|safe }}
+
+        {% elif block.type == 'plot' %}
+          <figure class="plot-figure">
+            {{ block.html|safe }}
+            {% if block.caption %}<figcaption class="block__caption--mono">{{ block.caption }}</figcaption>{% endif %}
+          </figure>
+
+        {% elif block.type == 'image' %}
+          <figure class="block">
+            <div class="block-image">
+              <img src="{{ block.src }}" alt="{{ block.alt or block.caption or 'Image' }}">
+            </div>
+            {% if block.caption %}<figcaption class="block__caption">{{ block.caption }}</figcaption>{% endif %}
+          </figure>
+
+        {% elif block.type == 'video' %}
+          <figure class="block">
+            {% if block.url %}
+            <div class="block-video">
+              <iframe src="{{ block.url }}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            {% elif block.src %}
+            <div class="block-video">
+              <video controls>
+                <source src="{{ block.src }}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            {% endif %}
+            {% if block.caption %}<figcaption class="block__caption">{{ block.caption }}</figcaption>{% endif %}
+          </figure>
+
+        {% elif block.type == 'code' %}
+          <div class="code-block">
+            <div class="code-block__lang">{{ block.language }}</div>
+            <pre><code class="language-{{ block.language }}">{{ block.code }}</code></pre>
+            {% if block.caption %}<div class="block__caption">{{ block.caption }}</div>{% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+  {% else %}
+    <div class="article-empty">
+      <div class="article-empty__glyph">&#9998;</div>
+      <p>This piece is still being written. Check back soon.</p>
+    </div>
+  {% endif %}
+
+  {% if post.tags %}
+  <div class="article-tags">
+    {% for tag in post.tags %}<span class="tag">#{{ tag }}</span>{% endfor %}
+  </div>
+  {% endif %}
+</article>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} — Projects{% endblock %}
+
+{% block content %}
+<section class="view view--narrow section section--tight-top">
+  <a href="{{ url_for('projects') }}" class="back-link">&larr; Back to Projects</a>
+
+  <h1 class="detail-title">{{ project.title }}</h1>
+  {% if project.description %}<p class="detail-lede">{{ project.description }}</p>{% endif %}
+
+  {% if project.github_link or project.live_link or project.blog_post_id %}
+  <div class="action-row">
+    {% if project.github_link %}
+    <a href="{{ project.github_link }}" target="_blank" rel="noopener" class="btn btn--outline">GitHub &nearr;</a>
+    {% endif %}
+    {% if project.live_link %}
+    <a href="{{ project.live_link }}" class="btn btn--primary">Visit live app <span class="arrow">&rarr;</span></a>
+    {% endif %}
+    {% if project.blog_post_id %}
+    <a href="{{ url_for('blog_post', blog_id=project.blog_post_id, ref='projects') }}" class="btn btn--accent-outline">Read the write-up <span class="arrow">&rarr;</span></a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% if project.technologies %}
+  <div class="tags tags--underlined">
+    {% for tech in project.technologies %}<span class="tag">{{ tech }}</span>{% endfor %}
+  </div>
+  {% endif %}
+
+  {% if project.images and project.images|length > 0 %}
+  <h2 class="eyebrow section-eyebrow">Gallery</h2>
+  <div class="gallery-grid">
+    {% for image in project.images %}
+    <div class="gallery-item placeholder">
+      <span class="placeholder__label">{{ image.split('/')[-1] }}</span>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if project.videos and project.videos|length > 0 %}
+  <h2 class="eyebrow section-eyebrow">Videos</h2>
+  <div class="video-list">
+    {% for video in project.videos %}
+    <div>
+      <div class="video-frame video-placeholder">
+        <span class="play-glyph"><span>&#9654;</span></span>
+      </div>
+      <div class="video-title">{{ video.title }}</div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

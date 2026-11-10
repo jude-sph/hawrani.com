@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Writing — Jude Hawrani{% endblock %}
+
+{% block content %}
+<section class="view view--narrow section">
+  <div class="page-header page-header--tight">
+    <h1>Writing</h1>
+  </div>
+
+  {% if entries %}
+  <div class="post-list">
+    {% for entry in entries %}
+    <a href="{{ url_for('blog_post', blog_id=entry.id, ref='writing') }}" class="post-item">
+      <div class="post-meta">
+        {% if entry.date %}<span>{{ entry.date }}</span>{% endif %}
+        {% if entry.lesswrong_id %}<span class="badge-lw">LW</span>{% endif %}
+      </div>
+      <h2 class="post-title">{{ entry.title }}</h2>
+      {% if entry.excerpt %}<p class="post-excerpt">{{ entry.excerpt }}</p>{% endif %}
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty-note">Nothing published yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,348 @@
+{
+  "entries": [
+    {
+      "id": "vlm-jacobian",
+      "lesswrong_id": "T3u6Hctes6vkawsib",
+      "excerpt": "Reading and editing the visual workspace of a vision-language model, using Anthropic's Jacobian lens.",
+      "published": true
+    },
+    {
+      "id": "depth",
+      "title": "The infinite depth of perverse knowledge",
+      "date": "2025-12-10",
+      "author": null,
+      "image": "/static/images/blog-images/fractal.jpg",
+      "excerpt": "Sometimes it is better to accept information without wondering about how it was produced",
+      "content_blocks": [
+        {
+          "type": "text",
+          "content": "<p>I think that sometimes when you are given some important information, the fact that you don't already know it means that the source must also be unknowable to you. In such a case, I find it really tempting to wonder about how the knowledge is produced; if you can find out, maybe you can produce some yourself! This is a bit arrogant for someone who just now didn't know anything about it at all.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>This is not a relevant thought for information about real things like maths, science, philosophy, etc.. I am talking about intuition and gut feeling that you sometimes get given. In my opinion, this type of information just is. It's production is like a hash function, if you somehow did know the axioms that produced it then you would also be able to do so, but if you don't have them (which it seems you don't) then you'll get lost working backwards.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>I came across an intuition the other day and got really excited about other ideas I could glean from it. I realised after some attempted gleaning that I was being arrogant and wanted to feel special. The intuition was pure and valid and my extensions were 'perverse' alterations. I use perverse to mean that they are an approximation of valid knowledge that only appears so.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>In logic, you would describe the pure intuition as a given valid theorem (a bit silly as you don't know the axioms or inference rules). The temptation is then to go back a few steps to see what lead to this, or go forward a few steps to see what else you can derive. Unfortunately, since you can't know how the knowledge was created, you can't.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>When you get one of these intuitions, the scope of new findings seems infinite. I think this is one of the core 'perversions'. You can search forever and you will always come across more. The infinite depth leads to satifiable destinations. This means that you can find things that make sense under your perspective, or work in some situations. I feel this is like 'magic', witches and wizards would handle this kind of perverse knowledge. The things they are known for certainly aren't natural or given.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>Magic only works when you think it will. I don't think this is a coincidence. People describe it as prayer, manifestation, magic. In my opinion, this is all perversely arrived at from purer intuitions. You know something about the world, and then infer something not entirely concrete but convincing. It works, but only under your perspective. Because, your perspective was used to derive it. Your mind is both the inference rule and the axiom. If you can derive magic using your mind from a valid truth, then it is satisfiable under your mind.</p>"
+        }
+      ],
+      "tags": null
+    },
+    {
+      "id": "BIP",
+      "title": "The black iron prison",
+      "date": "2026-07-01",
+      "author": null,
+      "image": "/static/images/blog-images/bip.jpg",
+      "excerpt": "Nature misleads man, a prison is also a shield.",
+      "content_blocks": [
+        {
+          "type": "text",
+          "content": "<p></p>"
+        }
+      ],
+      "tags": null
+    },
+    {
+      "id": "maize",
+      "listed": false,
+      "title": "Forecasting South African white maize futures prices using satellite data.",
+      "date": "2025-08-20",
+      "author": null,
+      "image": "/static/images/maize/NDVI_EXAMPLE.png",
+      "excerpt": "",
+      "github_link": "https://github.com/jude-sph/South-African-Maize-Futures",
+      "content_blocks": [
+        {
+          "type": "text",
+          "content": "<p>I wanted to correlate some unusual data to something that could generate returns, so I went to the NASA earthdata website and went browsing.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>On the EarthData website, I found a lot of compelling datasets. Agricultural signals seemed like they would have a solid link to market prices. I found the 16-day MODIS NDVI/EVI dataset with a 250m resolution (example below) and downloaded 20 years of data for north-eastern South Africa. South Africa's markets seemed developed and stable, but inefficient enough to turn a reasonable profit.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>I thought I better not choose the more commonly analysed Europe and North America out of fear of competing with Jane Street.</p>"
+        },
+        {
+          "type": "image",
+          "src": "/static/images/maize/NDVI_EXAMPLE.png",
+          "caption": "A sample of the vegetation data for east South Africa"
+        },
+        {
+          "type": "text",
+          "content": "<p>It took quite a long time to create effective features. I found the 16 day mean for both NDVI and EVI, then wrote a script to abtract these elements (rolling mean, median, lagged windows, etc.). I ended up with 168 features and an absurd VIF value for many of them, the top 10 were infinite. I found most of them had a reasonable correlation with price so I manually tried combinations of them to find a sweet spot. Once I had the sweet spot, I did a grid search of hyperparameters, then again with combinations of features.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>Up until this point, I had been using an LSTM model. I sent some of my results to my friend James who was very kind in letting me know (in a qualified and solicited manner) that I had severe overfitting. This was news to me, and warranted a nap.</p>"
+        },
+        {
+          "type": "text",
+          "content": "<p>In an attempt to mitigate the overfitting (from what I assumed were dodgy features), I started using a ridge regression model. I had read online that ridge regression automatically weights features that are highly correlated to each other appropriately. I know, there is still a lot of work to do to make this a viable trading strategy, and I will validate it further in the future, but I had fun developing it to this level. Here are some (interactive) results from my ridge model. The R2 score is inflated here as it uses a particularly lucky train, val, test split. Average R2 scores were a bit lower at 0.55.</p>"
+        },
+        {
+          "type": "plot",
+          "caption": "Actual vs Predicted Over Time",
+          "data": {
+            "title": "Actual vs Predicted Over Time",
+            "xlabel": "Date",
+            "ylabel": "Price",
+            "width": 12,
+            "height": 6,
+            "data": [
+              {
+                "type": "line",
+                "label": "Actual",
+                "x": [
+                  "2024-01-01",
+                  "2024-02-01",
+                  "2024-03-01",
+                  "2024-04-01",
+                  "2024-05-01",
+                  "2024-06-01",
+                  "2024-07-01",
+                  "2024-08-01",
+                  "2024-09-01",
+                  "2025-01-01",
+                  "2025-02-01",
+                  "2025-03-01",
+                  "2025-04-01",
+                  "2025-05-01",
+                  "2025-06-01",
+                  "2025-07-01"
+                ],
+                "y": [
+                  3841.49621212,
+                  4286.04545455,
+                  5237.04166667,
+                  5452.48636364,
+                  5122.54166667,
+                  5189.525,
+                  5359.52777778,
+                  5442.41666667,
+                  5538.5,
+                  5178.16666667,
+                  4644.46666667,
+                  4239.06818182,
+                  4416.85,
+                  4481.81818182,
+                  4776.20833333,
+                  4938.45
+                ]
+              },
+              {
+                "type": "line",
+                "label": "Predicted",
+                "x": [
+                  "2024-01-01",
+                  "2024-02-01",
+                  "2024-03-01",
+                  "2024-04-01",
+                  "2024-05-01",
+                  "2024-06-01",
+                  "2024-07-01",
+                  "2024-08-01",
+                  "2024-09-01",
+                  "2025-01-01",
+                  "2025-02-01",
+                  "2025-03-01",
+                  "2025-04-01",
+                  "2025-05-01",
+                  "2025-06-01",
+                  "2025-07-01"
+                ],
+                "y": [
+                  4196.08953996,
+                  4303.98921546,
+                  4846.76419813,
+                  5236.21641692,
+                  5369.5099054,
+                  5485.98779731,
+                  5249.79067276,
+                  5345.27980773,
+                  5610.35941801,
+                  4673.19575691,
+                  4411.30834644,
+                  4038.40952421,
+                  4987.1943488,
+                  4601.21390989,
+                  4840.28956393,
+                  4713.03751639
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "plot",
+          "caption": "Actual vs Predicted (R²=0.686)",
+          "data": {
+            "title": "Actual vs Predicted (R²=0.686)",
+            "xlabel": "Actual Price",
+            "ylabel": "Predicted Price",
+            "width": 12,
+            "height": 6,
+            "data": [
+              {
+                "type": "scatter",
+                "label": "Predictions",
+                "x": [
+                  3841.49621212,
+                  4286.04545455,
+                  5237.04166667,
+                  5452.48636364,
+                  5122.54166667,
+                  5189.525,
+                  5359.52777778,
+                  5442.41666667,
+                  5538.5,
+                  5178.16666667,
+                  4644.46666667,
+                  4239.06818182,
+                  4416.85,
+                  4481.81818182,
+                  4776.20833333,
+                  4938.45
+                ],
+                "y": [
+                  4196.08953996,
+                  4303.98921546,
+                  4846.76419813,
+                  5236.21641692,
+                  5369.5099054,
+                  5485.98779731,
+                  5249.79067276,
+                  5345.27980773,
+                  5610.35941801,
+                  4673.19575691,
+                  4411.30834644,
+                  4038.40952421,
+                  4987.1943488,
+                  4601.21390989,
+                  4840.28956393,
+                  4713.03751639
+                ]
+              },
+              {
+                "type": "line",
+                "label": "Perfect Prediction Line",
+                "dash": "dot",
+                "x": [
+                  3841.49621212,
+                  5610.35941801
+                ],
+                "y": [
+                  3841.49621212,
+                  5610.35941801
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "type": "plot",
+          "caption": "Error Distribution (MAE=232.45)",
+          "data": {
+            "title": "Error Distribution (MAE=232.45)",
+            "xlabel": "Prediction Error",
+            "ylabel": "Frequency",
+            "width": 12,
+            "height": 6,
+            "data": [
+              {
+                "type": "hist",
+                "y": [
+                  -354.59332784,
+                  -17.94376091,
+                  390.27746854,
+                  216.26994672,
+                  -246.96823873,
+                  -296.46279731,
+                  109.73710502,
+                  97.13685894,
+                  -71.85941801,
+                  504.97090976,
+                  233.15832023,
+                  200.65865761,
+                  -570.3443488,
+                  -119.39572807,
+                  -64.0812306,
+                  225.41248361
+                ],
+                "nbins": 30
+              }
+            ]
+          }
+        },
+        {
+          "type": "plot",
+          "caption": "Residuals",
+          "data": {
+            "title": "Residuals",
+            "xlabel": "Predicted Price",
+            "ylabel": "Residuals",
+            "width": 12,
+            "height": 6,
+            "data": [
+              {
+                "type": "scatter",
+                "x": [
+                  4196.08953996,
+                  4303.98921546,
+                  4846.76419813,
+                  5236.21641692,
+                  5369.5099054,
+                  5485.98779731,
+                  5249.79067276,
+                  5345.27980773,
+                  5610.35941801,
+                  4673.19575691,
+                  4411.30834644,
+                  4038.40952421,
+                  4987.1943488,
+                  4601.21390989,
+                  4840.28956393,
+                  4713.03751639
+                ],
+                "y": [
+                  -354.59332784,
+                  -17.94376091,
+                  390.27746854,
+                  216.26994672,
+                  -246.96823873,
+                  -296.46279731,
+                  109.73710502,
+                  97.13685894,
+                  -71.85941801,
+                  504.97090976,
+                  233.15832023,
+                  200.65865761,
+                  -570.3443488,
+                  -119.39572807,
+                  -64.0812306,
+                  225.41248361
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "tags": null
+    }
+  ]
+}

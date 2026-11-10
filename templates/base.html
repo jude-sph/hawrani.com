@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Jude Hawrani{% endblock %}</title>
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  <!-- Highlight.js for syntax highlighting in code blocks -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+  <!-- Plotly.js for interactive plots -->
+  <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+
+  {% block head %}{% endblock %}
+</head>
+<body>
+  {#- Map the current endpoint to a top-level nav section so detail pages stay highlighted. -#}
+  {% set ep = request.endpoint or '' %}
+  {% if ep in ['projects', 'project_detail'] %}{% set section = 'projects' %}
+  {% elif ep in ['blog', 'blog_post'] %}{% set section = 'blog' %}
+  {% elif ep == 'home' %}{% set section = 'home' %}
+  {% else %}{% set section = '' %}{% endif %}
+
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <div class="page">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a href="{{ url_for('home') }}" class="wordmark">hawrani<span class="wordmark__dot">.</span></a>
+        <nav class="nav">
+          <a href="{{ url_for('home') }}" class="nav__link {% if section == 'home' %}is-active{% endif %}">Home</a>
+          <a href="{{ url_for('projects') }}" class="nav__link {% if section == 'projects' %}is-active{% endif %}">Projects</a>
+          <a href="{{ url_for('blog') }}" class="nav__link {% if section == 'blog' %}is-active{% endif %}">Writing</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-main">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <span>Jude Hawrani © 2026</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/background.js') }}"></script>
+  <!-- Highlight.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.querySelectorAll('pre code').forEach(function (block) { hljs.highlightElement(block); });
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

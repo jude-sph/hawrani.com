@@ -1,0 +1,8 @@
+_site/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+# Runtime cache of the last LessWrong fetch; the committed fallback is data/lesswrong_seed.json
+data/lesswrong_cache.json

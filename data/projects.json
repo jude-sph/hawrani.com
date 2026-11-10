@@ -1,0 +1,22 @@
+{
+  "projects": [
+    {
+      "id": "JLens",
+      "title": "Reading VLM hallucinations with the Jacobian lens",
+      "short_description": "Using Anthropic's Jacobian lens to read and edit the visual workspace of a vision-language model",
+      "description": "Reading and editing the visual workspace of a vision-language model, using Anthropic's Jacobian lens.",
+      "thumbnail": null,
+      "images": [],
+      "videos": [],
+      "technologies": [
+        "Python",
+        "PyTorch",
+        "Interpretability"
+      ],
+      "github_link": null,
+      "live_link": null,
+      "blog_post_id": "vlm-jacobian",
+      "link_to_blog_post": true
+    }
+  ]
+}

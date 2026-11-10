@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Projects — Jude Hawrani{% endblock %}
+
+{% block content %}
+<section class="view section">
+  <div class="page-header">
+    <h1>Projects</h1>
+  </div>
+
+  {% if projects %}
+  <div class="project-grid">
+    {% for project in projects %}
+    {% if project.link_to_blog_post and project.blog_post_id %}
+      {% set href = url_for('blog_post', blog_id=project.blog_post_id, ref='projects') %}
+    {% else %}
+      {% set href = url_for('project_detail', project_id=project.id) %}
+    {% endif %}
+    <a href="{{ href }}" class="card">
+      <div class="card__thumb {% if not project.thumbnail %}placeholder{% endif %}">
+        {% if project.thumbnail %}
+          <img src="{{ project.thumbnail }}" alt="{{ project.title }}">
+        {% else %}
+          <span class="placeholder__label">{{ project.id|lower }}.png</span>
+        {% endif %}
+      </div>
+      <div class="card__body">
+        <h2 class="card__title">{{ project.title }}</h2>
+        <p class="card__desc">{{ project.short_description }}</p>
+        {% if project.technologies %}
+        <div class="tags">
+          {% for tech in project.technologies %}<span class="tag">{{ tech }}</span>{% endfor %}
+        </div>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty-note">No projects yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
