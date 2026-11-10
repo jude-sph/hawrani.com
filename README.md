@@ -15,13 +15,18 @@ python build.py --serve      # static build, preview at http://localhost:8000
 python app.py                # or: live Flask server with auto-reload
 ```
 
-## Deploying
+## Publishing
 
-Pushing to `main` runs `.github/workflows/deploy.yml`, which builds the site and
-publishes it to GitHub Pages. LessWrong-backed posts are fetched at build time,
-so to pick up edits to one, re-run the workflow from the Actions tab.
+```bash
+python build.py --publish
+```
 
-The build fails (and nothing is published) if any page errors or any internal
+This builds the site and force-pushes `_site/` to the `gh-pages` branch, which
+GitHub Pages serves directly (Settings → Pages → source: `gh-pages` branch).
+No GitHub Actions are involved. Push `main` as usual to keep the source backed
+up; that alone doesn't change the live site.
+
+The build stops (and nothing is published) if any page errors or any internal
 link points at a page that doesn't exist.
 
 ## Notes

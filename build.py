@@ -2,18 +2,22 @@
 
     python build.py            # build into _site/
     python build.py --serve    # build, then preview at http://localhost:8000
+    python build.py --publish  # build, then push _site/ to the gh-pages branch
 
-Each page is rendered through the Flask app's test client, so the output is
-exactly what the Flask server would have sent. LessWrong posts are fetched at
-build time (with the mirror / seed-file fallbacks in lesswrong.py), so
-re-running the deploy workflow refreshes them.
+GitHub Pages serves the gh-pages branch as-is, so publishing needs no GitHub
+Actions. Each page is rendered through the Flask app's test client, so the
+output is exactly what the Flask server would have sent. LessWrong posts are
+fetched at build time (with the mirror / seed-file fallbacks in lesswrong.py),
+so publishing again refreshes them.
 """
 
 import http.server
 import os
 import re
 import shutil
+import subprocess
 import sys
+import tempfile
 from functools import partial
 from urllib.parse import urlsplit
 
@@ -136,7 +140,27 @@ def serve(port=8000):
     http.server.ThreadingHTTPServer(('', port), handler).serve_forever()
 
 
+def publish():
+    """Push _site/ to the gh-pages branch as a single fresh commit.
+
+    The branch only ever holds the latest build (force-pushed), so old
+    versions of the site don't pile up in its history.
+    """
+    remote = subprocess.run(['git', 'remote', 'get-url', 'origin'], cwd=ROOT,
+                            check=True, capture_output=True, text=True).stdout.strip()
+    with tempfile.TemporaryDirectory() as tmp:
+        shutil.copytree(OUT, tmp, dirs_exist_ok=True)
+        git = lambda *args: subprocess.run(['git', *args], cwd=tmp, check=True)
+        git('init', '-q', '-b', 'gh-pages')
+        git('add', '-A')
+        git('commit', '-q', '-m', 'Built site')
+        git('push', '-q', '--force', remote, 'gh-pages')
+    print('Published. GitHub Pages usually updates within a minute.')
+
+
 if __name__ == '__main__':
     build()
+    if '--publish' in sys.argv:
+        publish()
     if '--serve' in sys.argv:
         serve()
